@@ -2,11 +2,14 @@ package com.example.UserService.service;
 
 
 import com.example.UserService.amqp.UserInfoPublisher;
+import com.example.UserService.models.dto.UserIdListDTO;
 import com.example.UserService.models.entities.User;
 import com.example.UserService.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.List;
+import java.util.ArrayList;
 
 @Service
 public class IUserServiceImpl implements IUserService {
@@ -25,8 +28,13 @@ public class IUserServiceImpl implements IUserService {
     }
 
     @Override
-    public User getUserById(Long id) {
-        return userRepository.getById(id);
+    public List<User> getUserById(UserIdListDTO idList) {
+        List<User> userInfoList = new ArrayList<User>();
+        for(Long id : idList.getUserIdList()){
+            userInfoList.add(userRepository.getById(id));
+        }
+
+        return userInfoList;
     }
 
     @Override
