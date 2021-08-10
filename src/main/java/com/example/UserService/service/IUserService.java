@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public interface IUserService {
     User addUser(User user);
-    List<User> getUserById(UserIdListDTO userIdList);
+    void getUserById(UserIdListDTO userIdList);
 
-    Optional<User> userInfoTarget(Long id);
+
 }

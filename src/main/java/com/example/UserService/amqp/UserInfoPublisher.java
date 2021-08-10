@@ -1,5 +1,6 @@
 package com.example.UserService.amqp;
 
+import com.example.UserService.models.dto.UserInfoListDTO;
 import com.example.UserService.models.entities.User;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -20,13 +21,11 @@ public class UserInfoPublisher {
     @Value("${sr.rabbit.routing.name}")
     private String userInfoRoutingKey;
 
-    public void publishUserInfoMesssage(User user){
-        var message = new UserInfoMessage();
-        message.setId(user.getId());
-        message.setFullName(user.getFullName());
-        message.setEmail(user.getEmail());
+    public void publishUserInfoMesssage(UserInfoListDTO message){
+
 
         rabbitTemplate.convertAndSend(userInfoExchange.getName(), userInfoRoutingKey, message );
+        System.out.println(message);
 
     }
 }

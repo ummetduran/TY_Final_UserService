@@ -19,10 +19,10 @@ public class UserController {
     public ResponseEntity<User>  addUser(@RequestBody User user){
         return new ResponseEntity<User>(userService.addUser(user), HttpStatus.CREATED);
     }
-    @GetMapping("/userIdList")
+ /*   @GetMapping("/userIdList")
     public ResponseEntity<List<User>> getUsersById(@RequestBody UserIdListDTO userIdList){
         System.out.println(userIdList);
         return  ResponseEntity.ok(userService.getUserById(userIdList));
-    }
+    }*/
 
 }

@@ -3,6 +3,7 @@ package com.example.UserService.service;
 
 import com.example.UserService.amqp.UserInfoPublisher;
 import com.example.UserService.models.dto.UserIdListDTO;
+import com.example.UserService.models.dto.UserInfoListDTO;
 import com.example.UserService.models.entities.User;
 import com.example.UserService.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -28,23 +29,22 @@ public class IUserServiceImpl implements IUserService {
     }
 
     @Override
-    public List<User> getUserById(UserIdListDTO idList) {
-        List<User> userInfoList = new ArrayList<User>();
+    public void getUserById(UserIdListDTO idList) {
+        UserInfoListDTO userInfoList = new UserInfoListDTO();
+        List<User> userList = new ArrayList();
         for(Long id : idList.getUserIdList()){
-            userInfoList.add(userRepository.getById(id));
+            System.out.println(id);
+            Optional<User>userRecord = userRepository.findById(id);
+            if(userRecord.isPresent()){
+                User userInfo = userRecord.get();
+                userList.add(userInfo);
+            }
         }
+        userInfoList.setUserInfoList(userList);
+        publisher.publishUserInfoMesssage(userInfoList);
 
-        return userInfoList;
+
     }
 
-    @Override
-    public Optional<User> userInfoTarget(Long id) {
-        User sendUser = null;
-        Optional<User> user = userRepository.findById(id);
-        if(user.isPresent()){
-            sendUser = user.get();
-        }
-        publisher.publishUserInfoMesssage(sendUser);
-        return userRepository.findById(id);
-    }
+
 }
