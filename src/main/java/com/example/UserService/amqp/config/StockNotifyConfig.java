@@ -1,4 +1,4 @@
-package com.example.UserService.amqp;
+package com.example.UserService.amqp.config;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -9,16 +9,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class UserMessageConfig {
+public class StockNotifyConfig {
 
-
-    @Value("${sr.rabbit.queue.name}")
+    @Value("${sr.rabbit.queue.name.stock-notify}")
     private String queueName;
 
-    @Value("${sr.rabbit.routing.name}")
-    private String routingName;
-    @Value("${sr.rabbit.exchange.name}")
+    @Value("${sr.rabbit.exchange.name.stock-notify}")
     private String exchangeName;
+
+    @Value("${sr.rabbit.routing.name.stock-notify}")
+    private String routingName;
 
     @Bean
     public Queue queue(){

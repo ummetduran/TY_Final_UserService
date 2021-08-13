@@ -1,4 +1,4 @@
-package com.example.UserService.amqp;
+package com.example.UserService.amqp.config;
 
 
 import org.springframework.amqp.rabbit.annotation.RabbitListenerConfigurer;

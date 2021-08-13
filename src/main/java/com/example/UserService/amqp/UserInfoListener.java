@@ -1,5 +1,6 @@
 package com.example.UserService.amqp;
 
+import com.example.UserService.models.dto.UserIdListDTO;
 import com.example.UserService.service.IUserService;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
@@ -12,8 +13,9 @@ public class UserInfoListener {
         this.userService = userService;
     }
 
-    @RabbitListener(queues = "${sr.rabbit.queue.name}")
-    public void userTargetListener(Long id) {
-        userService.userInfoTarget(id);
+    @RabbitListener(queues = "${user.rabbit.queues.user-info}")
+    public void userTargetListener(UserIdListDTO userList) {
+        System.out.println(userList);
+        userService.getUserById(userList);
     }
 }
