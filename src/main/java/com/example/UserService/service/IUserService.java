@@ -1,11 +1,9 @@
 package com.example.UserService.service;
 
 import com.example.UserService.models.dto.UserIdListDTO;
+import com.example.UserService.models.dto.UserIdForStockDTO;
 import com.example.UserService.models.entities.User;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
-import java.util.List;
 
 @Service
 public interface IUserService {
@@ -13,4 +11,5 @@ public interface IUserService {
     void getUserById(UserIdListDTO userIdList);
 
 
+    void getUsersForQuantityNotification(UserIdForStockDTO dto);
 }

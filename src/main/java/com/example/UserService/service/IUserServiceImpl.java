@@ -1,9 +1,12 @@
 package com.example.UserService.service;
 
 
+import com.example.UserService.amqp.StockNotifyProducer;
 import com.example.UserService.amqp.UserInfoPublisher;
 import com.example.UserService.models.dto.UserIdListDTO;
+import com.example.UserService.models.dto.UserIdForStockDTO;
 import com.example.UserService.models.dto.UserInfoListDTO;
+import com.example.UserService.models.dto.UserInfoStockDTO;
 import com.example.UserService.models.entities.User;
 import com.example.UserService.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -17,10 +20,12 @@ public class IUserServiceImpl implements IUserService {
 
     private final UserRepository userRepository;
     private final UserInfoPublisher publisher;
+    private final StockNotifyProducer stockNotifyProducer;
 
-    public IUserServiceImpl(UserRepository userRepository, UserInfoPublisher producer) {
+    public IUserServiceImpl(UserRepository userRepository, UserInfoPublisher producer, StockNotifyProducer stockNotifyProducer) {
         this.userRepository = userRepository;
         this.publisher = producer;
+        this.stockNotifyProducer = stockNotifyProducer;
     }
 
     @Override
@@ -43,6 +48,24 @@ public class IUserServiceImpl implements IUserService {
         userInfoList.setUserInfoList(userList);
         publisher.publishUserInfoMesssage(userInfoList);
 
+
+    }
+
+    @Override
+    public void getUsersForQuantityNotification(UserIdForStockDTO dto) {
+        UserInfoStockDTO userInfoStockDTO = new UserInfoStockDTO();
+        List<User> userList = new ArrayList<>();
+        for(Long id :dto.getUserIdList()){
+            Optional<User> userOptional =userRepository.findById(id);
+            if(userOptional.isPresent()){
+                User user = userOptional.get();
+                userList.add(user);
+            }
+        }
+        userInfoStockDTO.setUserList(userList);
+        userInfoStockDTO.setMessageType(dto.getMessageType());
+        userInfoStockDTO.setProductId(dto.getProductId());
+        stockNotifyProducer.sendToQueue(userInfoStockDTO);
 
     }
 

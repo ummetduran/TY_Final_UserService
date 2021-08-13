@@ -13,7 +13,7 @@ public class UserInfoListener {
         this.userService = userService;
     }
 
-    @RabbitListener(queues = "${user.rabbit.queue.name.user-info}")
+    @RabbitListener(queues = "${user.rabbit.queues.user-info}")
     public void userTargetListener(UserIdListDTO userList) {
         System.out.println(userList);
         userService.getUserById(userList);
